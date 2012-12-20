@@ -5,7 +5,7 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-public class App {
+public class BlueprintsServer {
     public static void main(String[] args) {
         // Create the Graph
         TitanGraph g = TitanFactory.open("/tmp/titan");
