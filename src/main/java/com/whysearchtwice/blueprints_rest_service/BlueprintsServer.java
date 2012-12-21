@@ -98,6 +98,16 @@ public class BlueprintsServer {
     }
 
     /**
+     * Load the data from an XML file into the Titan graph.
+     * 
+     * @param filename
+     *            Location of the file to be loaded into the graph
+     */
+    public void loadXmlData(String filename) {
+        conn.loadXmlData(filename);
+    }
+
+    /**
      * Shuts down the web server after it has been created and started
      */
     public void shutdown() {

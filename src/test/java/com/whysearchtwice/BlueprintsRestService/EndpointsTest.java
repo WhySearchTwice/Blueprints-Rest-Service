@@ -52,6 +52,7 @@ public class EndpointsTest extends TestCase {
      */
     public void setUp() {
         server = new BlueprintsServer("http://localhost/", 8080, "/tmp/titan");
+        server.loadXmlData("oneHourTestData.xml");
     }
 
     /*

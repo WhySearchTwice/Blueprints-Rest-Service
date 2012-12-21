@@ -1,5 +1,10 @@
 package com.whysearchtwice.blueprints_rest_service.graph_interactions;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 
@@ -7,6 +12,7 @@ import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 
 /**
  * A connection to the Titan graph that can be used to perform queries and
@@ -39,7 +45,18 @@ public class TitanConnector {
         conf.setProperty("storage.hostname", "127.0.0.1");
         this.graph = TitanFactory.open(conf);
     }
-    
+
+    public void loadXmlData(String filename) {
+        try {
+            InputStream in = new FileInputStream(filename);
+            GraphMLReader.inputGraph(graph, in);
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void titanDemo() {
         // Create the Graph
         TitanGraph g = TitanFactory.open("/tmp/titan");

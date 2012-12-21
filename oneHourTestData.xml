@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+    <key attr.name="pageOpenTime" attr.type="string" for="node" id="pageOpenTime"/>
+    <key attr.name="username" attr.type="string" for="node" id="username"/>
+    <graph edgedefault="directed" id="G">
+        <!--I don't know about you, but I always have gmail and calendar open-->
+        <node id="1">
+            <data key="title">Google Mail</data>
+            <data key="username">tony@grosinger.net</data>
+            <data key="url">https://mail.google.com/mail/u/0/?shva=1#inbox</data>
+            <data key="pageOpenTime">1356128851000</data>
+            <data key="pageCloseTime">1356132451000</data>
+            <data key="tabId">1</data>
+            <data key="windowId">100</data>
+        </node>
+        <node id="2">
+            <data key="title">Google Calendar</data>
+            <data key="username">tony@grosinger.net</data>
+            <data key="url">https://www.google.com/calendar/render</data>
+            <data key="pageOpenTime">1356128851000</data>
+            <data key="pageCloseTime">1356132451000</data>
+            <data key="tabId">2</data>
+            <data key="windowId">100</data>
+        </node>
+    </graph>
+</graphml>
+
