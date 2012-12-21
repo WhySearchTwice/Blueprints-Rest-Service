@@ -13,21 +13,86 @@ import com.whysearchtwice.blueprints_rest_service.jersey.JerseyServer;
  * @author Tony Grosinger
  */
 public class BlueprintsServer {
-    public static void main(String[] args) {
+    /**
+     * The connection to the database created by the constructor
+     */
+    private static TitanConnector conn;
+
+    /**
+     * The web server created by the constructor
+     */
+    private static JerseyServer webserver;
+
+    /**
+     * Constructor that will start the service using a file backend
+     * 
+     * @param baseUrl
+     *            Address which should be used as the base url for the web
+     *            server
+     * @param portNumber
+     *            Port number the web server should run on
+     * @param database
+     *            The file which should be used as the backend
+     */
+    public BlueprintsServer(String baseUrl, int portNumber, String database) {
         // Create the titan graph
-        TitanConnector conn = new TitanConnector("/tmp/titan");
+        if (database == null) {
+            conn = new TitanConnector();
+        } else {
+            conn = new TitanConnector("/tmp/titan");
+        }
 
-        JerseyServer webserver = new JerseyServer("http://localhost/", 8080);
+        // Create the web server
+        webserver = new JerseyServer("http://localhost/", 8080);
 
+        // Start the web server
         try {
             webserver.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Wait for the user to press enter before stopping the web server
+    /**
+     * Constructor that will start the service using the Cassandra backend
+     * 
+     * @param baseUrl
+     *            Address which should be used as the base url for the web
+     *            server
+     * @param portNumber
+     *            Port number the web server should run on
+     */
+    public BlueprintsServer(String baseUrl, int portNumber) {
+        this(baseUrl, portNumber, null);
+    }
+
+    /**
+     * This is a factory method which will create an instance of itself using
+     * the parameters in the arguments
+     * 
+     * @param args
+     *            Should contain two or three arguments containing the baseUrl,
+     *            port, and optionally the database file to use
+     */
+    public static void main(String[] args) {
+        BlueprintsServer server = new BlueprintsServer("http://localhost/", 8080, "/tmp/titan");
+
+        // Wait for the user to press enter before stopping the web server
+        try {
             System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        server.shutdown();
+    }
+
+    /**
+     * Shuts down the web server after it has been created and started
+     */
+    public void shutdown() {
+        try {
             webserver.stop();
-        } catch (IOException e1) {
-            e1.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
