@@ -48,7 +48,7 @@ public class JerseyServer {
     private HttpServer createServer() {
         System.out.println("Creating grizzly server");
 
-        ResourceConfig rc = new PackagesResourceConfig("com.whysearchtwice.BlueprintsRestService");
+        ResourceConfig rc = new PackagesResourceConfig("com.whysearchtwice.blueprints_rest_service.jersey");
         URI baseUri = UriBuilder.fromUri(baseUrl).port(portNumber).build();
 
         try {
