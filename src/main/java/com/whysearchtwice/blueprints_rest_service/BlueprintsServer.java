@@ -75,7 +75,17 @@ public class BlueprintsServer {
      *            port, and optionally the database file to use
      */
     public static void main(String[] args) {
-        BlueprintsServer server = new BlueprintsServer("http://localhost/", 8080, "/tmp/titan");
+        BlueprintsServer server = null;
+
+        if (args.length == 3) {
+            int portNumber = Integer.parseInt(args[1]);
+            server = new BlueprintsServer(args[0], portNumber, args[2]);
+        } else if (args.length == 2) {
+            int portNumber = Integer.parseInt(args[1]);
+            server = new BlueprintsServer(args[0], portNumber);
+        } else {
+            System.out.println("Invalid arguments. Expecting <baseUrl> <portNumber> <titanDir> with last param optional");
+        }
 
         // Wait for the user to press enter before stopping the web server
         try {
