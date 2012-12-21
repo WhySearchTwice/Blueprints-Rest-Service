@@ -1,12 +1,44 @@
-package com.whysearchtwice.BlueprintsRestService;
+package com.whysearchtwice.blueprints_rest_service;
+
+import java.io.IOException;
+
 
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
+import com.whysearchtwice.blueprints_rest_service.graph_interactions.TitanConnector;
+import com.whysearchtwice.blueprints_rest_service.jersey.JerseyServer;
 
 public class BlueprintsServer {
     public static void main(String[] args) {
+        // Create the titan graph
+        TitanConnector conn = new TitanConnector("/tmp/titan");
+        
+        JerseyServer webserver = new JerseyServer("http://localhost/", 8080);
+
+        try {
+            webserver.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.in.read();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        try {
+            webserver.stop();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void titanDemo() {
         // Create the Graph
         TitanGraph g = TitanFactory.open("/tmp/titan");
 
@@ -43,9 +75,9 @@ public class BlueprintsServer {
         for (Vertex vertex : juno.query().vertices()) {
             System.out.println(vertex.getProperty("name"));
         }
-        
+
         // Example query using an index
-        Vertex juno2 = g.getVertices("name","juno").iterator().next();
+        Vertex juno2 = g.getVertices("name", "juno").iterator().next();
         for (Vertex vertex : juno2.query().vertices()) {
             System.out.println(vertex.getProperty("name"));
         }

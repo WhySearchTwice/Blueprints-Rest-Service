@@ -1,4 +1,4 @@
-package com.whysearchtwice.BlueprintsRestService;
+package com.whysearchtwice.blueprints_rest_service.jersey.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
