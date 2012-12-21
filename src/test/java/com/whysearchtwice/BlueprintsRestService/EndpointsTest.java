@@ -1,5 +1,14 @@
 package com.whysearchtwice.BlueprintsRestService;
 
+import java.io.IOException;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+
+import com.whysearchtwice.blueprints_rest_service.BlueprintsServer;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -10,6 +19,11 @@ import junit.framework.TestSuite;
  * @author Tony Grosinger
  */
 public class EndpointsTest extends TestCase {
+    /**
+     * Storage for the server that will be tested
+     */
+    BlueprintsServer server;
+
     /**
      * Default constructor needed to create the test case
      * 
@@ -30,26 +44,35 @@ public class EndpointsTest extends TestCase {
         return new TestSuite(EndpointsTest.class);
 
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     public void setUp() {
-        System.out.println("Setup");
+        server = new BlueprintsServer("http://localhost/", 8080, "/tmp/titan");
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#tearDown()
      */
     public void tearDown() {
-        System.out.println("Teardown");
+        server.shutdown();
     }
 
     /**
      * Rigourous Test :-)
+     * 
+     * @throws IOException
+     * @throws HttpException
      */
-    public void testApp() {
-        assertTrue(true);
-        System.out.println("Something!");
+    public void testApp() throws HttpException, IOException {
+        HttpClient client = new HttpClient();
+        HttpMethod method = new GetMethod("http://localhost:8080/user/anEmailAddress");
+        int responseCode = client.executeMethod(method);
+        assertTrue(responseCode == 200);
     }
 }
