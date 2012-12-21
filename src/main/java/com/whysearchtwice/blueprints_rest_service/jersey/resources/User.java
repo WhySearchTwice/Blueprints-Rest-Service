@@ -7,6 +7,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+/**
+ * REST endpoints for the User resource. For use with the Jersey web server
+ * 
+ * @author Tony Grosinger
+ */
 @Path("/user/")
 public class User {
     @GET

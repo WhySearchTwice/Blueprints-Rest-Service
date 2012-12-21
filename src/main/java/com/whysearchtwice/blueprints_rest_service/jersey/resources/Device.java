@@ -8,6 +8,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+/**
+ * REST endpoints for the Device resource. For use with the Jersey web server
+ * 
+ * @author Tony Grosinger
+ */
 @Path("/device/")
 public class Device {
 
