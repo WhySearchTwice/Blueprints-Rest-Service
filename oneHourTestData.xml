@@ -1,27 +1,45 @@
 <?xml version="1.0" ?>
-<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
-    <key attr.name="pageOpenTime" attr.type="string" for="node" id="pageOpenTime"/>
-    <key attr.name="username" attr.type="string" for="node" id="username"/>
-    <graph edgedefault="directed" id="G">
-        <!--I don't know about you, but I always have gmail and calendar open-->
-        <node id="1">
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+    <key id="title" for="node" attr.name="title" attr.type="string"></key>
+    <key id="username" for="node" attr.name="username" attr.type="string"></key>
+    <key id="userguid" for="node" attr.name="userguid" attr.type="string"></key>
+    <key id="pageOpenTime" for="node" attr.name="pageOpenTime" attr.type="long"></key>
+    <key id="windowId" for="node" attr.name="windowId" attr.type="int"></key>
+    <key id="tabId" for="node" attr.name="tabId" attr.type="int"></key>
+    <key id="pageCloseTime" for="node" attr.name="pageCloseTime" attr.type="long"></key>
+    <key id="type" for="node" attr.name="type" attr.type="string"></key>
+    <key id="url" for="node" attr.name="url" attr.type="string"></key>
+
+    <graph id="G" edgedefault="directed">
+        <node id="4">
+            <data key="username">tony@grosinger.net</data>
+            <data key="userguid">1234567890</data>
+            <data key="type">user</data>
+        </node>
+
+        <node id="8">
             <data key="title">Google Mail</data>
-            <data key="username">tony@grosinger.net</data>
-            <data key="url">https://mail.google.com/mail/u/0/?shva=1#inbox</data>
+            <data key="userguid">1234567890</data>
+            <data key="windowId">100</data>
             <data key="pageOpenTime">1356128851000</data>
-            <data key="pageCloseTime">1356132451000</data>
             <data key="tabId">1</data>
-            <data key="windowId">100</data>
-        </node>
-        <node id="2">
-            <data key="title">Google Calendar</data>
-            <data key="username">tony@grosinger.net</data>
-            <data key="url">https://www.google.com/calendar/render</data>
-            <data key="pageOpenTime">1356128851000</data>
             <data key="pageCloseTime">1356132451000</data>
-            <data key="tabId">2</data>
-            <data key="windowId">100</data>
+            <data key="type">pageView</data>
+            <data key="url">https://mail.google.com/mail/u/0/?shva=1#inbox</data>
         </node>
+
+        <node id="12">
+            <data key="title">Google Calendar</data>
+            <data key="userguid">1234567890</data>
+            <data key="windowId">100</data>
+            <data key="pageOpenTime">1356128851000</data>
+            <data key="tabId">2</data>
+            <data key="pageCloseTime">1356132451000</data>
+            <data key="type">pageView</data>
+            <data key="url">https://www.google.com/calendar/render</data>
+        </node>
+
+        <edge id="107:4:36028797018964054" source="4" target="8" label="viewed"></edge>
+        <edge id="109:4:36028797018964054" source="4" target="12" label="viewed"></edge>
     </graph>
 </graphml>
-
