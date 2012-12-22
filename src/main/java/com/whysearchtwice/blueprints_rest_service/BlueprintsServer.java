@@ -41,9 +41,9 @@ public class BlueprintsServer {
         } else {
             conn = new TitanConnector("/tmp/titan");
         }
-
+        
         // Create the web server
-        webserver = new JerseyServer("http://localhost/", 8080);
+        webserver = new JerseyServer("http://localhost/", 8080, conn);
 
         // Start the web server
         try {

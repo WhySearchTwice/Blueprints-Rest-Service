@@ -1,11 +1,14 @@
 package com.whysearchtwice.BlueprintsRestService;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 
 import com.whysearchtwice.blueprints_rest_service.BlueprintsServer;
 
@@ -72,8 +75,18 @@ public class EndpointsTest extends TestCase {
      */
     public void testApp() throws HttpException, IOException {
         HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod("http://localhost:8080/user/anEmailAddress");
+        HttpMethod method = new GetMethod("http://localhost:8080/user/tony@grosinger.net");
+        
+        // Get response code
         int responseCode = client.executeMethod(method);
         assertTrue(responseCode == 200);
+        
+        // Get response body
+        InputStream responseBodyStream = method.getResponseBodyAsStream();
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(responseBodyStream, writer);
+        String response = writer.toString();
+        assertTrue(response.equals("1234567890"));
+        
     }
 }

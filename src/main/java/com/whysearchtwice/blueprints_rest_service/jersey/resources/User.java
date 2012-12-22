@@ -7,6 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import com.whysearchtwice.blueprints_rest_service.jersey.JerseyServer;
+
 /**
  * REST endpoints for the User resource. For use with the Jersey web server
  * 
@@ -18,8 +20,7 @@ public class User {
     @Produces("application/json")
     @Path("/{email}")
     public String getUser(@PathParam("email") String email) {
-        System.out.println("1");
-        return "";
+        return JerseyServer.connection.userInteractions.getUserGuidByEmail(email);
     }
 
     @PATCH

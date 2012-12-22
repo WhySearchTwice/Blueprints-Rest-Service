@@ -10,6 +10,7 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
+import com.whysearchtwice.blueprints_rest_service.graph_interactions.TitanConnector;
 
 /**
  * Web server using Jersey to make Titan graph accessible through REST
@@ -34,12 +35,18 @@ public class JerseyServer {
     private HttpServer webserver;
 
     /**
+     * The connection used by the REST endpoints to interact with the graph
+     */
+    public static TitanConnector connection;
+
+    /**
      * Constructor to specify the baseUrl and portNumber before the server is
      * started.
      */
-    public JerseyServer(String baseUrl, int portNumber) {
+    public JerseyServer(String baseUrl, int portNumber, TitanConnector conn) {
         this.baseUrl = baseUrl;
         this.portNumber = portNumber;
+        JerseyServer.connection = conn;
 
         // Create a new server using this new-found information
         createServer();

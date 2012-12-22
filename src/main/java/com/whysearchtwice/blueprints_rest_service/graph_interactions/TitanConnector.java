@@ -2,8 +2,10 @@ package com.whysearchtwice.blueprints_rest_service.graph_interactions;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -13,6 +15,7 @@ import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
+import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter;
 
 /**
  * A connection to the Titan graph that can be used to perform queries and
@@ -26,6 +29,8 @@ public class TitanConnector {
      */
     private TitanGraph graph;
 
+    public User userInteractions;
+
     /**
      * Open a Titan graph using a file store as the backend (not persistent)
      * 
@@ -34,6 +39,8 @@ public class TitanConnector {
      */
     public TitanConnector(String tempLocation) {
         this.graph = TitanFactory.open(tempLocation);
+
+        createConnections();
     }
 
     /**
@@ -44,6 +51,12 @@ public class TitanConnector {
         conf.setProperty("storage.backend", "cassandra");
         conf.setProperty("storage.hostname", "127.0.0.1");
         this.graph = TitanFactory.open(conf);
+
+        createConnections();
+    }
+
+    private void createConnections() {
+        userInteractions = new User(graph);
     }
 
     public void loadXmlData(String filename) {
@@ -56,49 +69,63 @@ public class TitanConnector {
             e.printStackTrace();
         }
     }
+    
+    public void dumpXmlData(String filename) {
+        try {
+            OutputStream out = new FileOutputStream(filename);
+            GraphMLWriter.outputGraph(graph, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void titanDemo() {
+    public void titanDemo() {
         // Create the Graph
         TitanGraph g = TitanFactory.open("/tmp/titan");
 
         // Create some Indices
-        g.createKeyIndex("name", Vertex.class);
-
-        // Create some Vertices
-        Vertex juno = g.addVertex(null);
-        juno.setProperty("name", "juno");
-        Vertex turnus = g.addVertex(null);
-        turnus.setProperty("name", "turnus");
-        Vertex hercules = g.addVertex(null);
-        hercules.setProperty("name", "hercules");
-        Vertex dido = g.addVertex(null);
-        dido.setProperty("name", "dido");
-        Vertex troy = g.addVertex(null);
-        troy.setProperty("name", "troy");
-        Vertex jupiter = g.addVertex(null);
-        jupiter.setProperty("name", "jupiter");
-
-        // Create some Edges
-        Edge edge = g.addEdge(null, juno, turnus, "knows");
-        edge.setProperty("since", 2010);
-        edge.setProperty("stars", 5);
-        edge = g.addEdge(null, juno, hercules, "knows");
-        edge.setProperty("since", 2011);
-        edge.setProperty("stars", 1);
-        edge = g.addEdge(null, juno, dido, "knows");
-        edge.setProperty("since", 2011);
-        edge.setProperty("stars", 5);
-        g.addEdge(null, juno, troy, "likes").setProperty("stars", 5);
+        g.createKeyIndex("type", Vertex.class);
+        g.createKeyIndex("pageOpenTime", Vertex.class);
+        g.createKeyIndex("username", Vertex.class);
+        g.createKeyIndex("userguid", Vertex.class);
+        
+        Vertex user = g.addVertex(null);
+        user.setProperty("type", "user");
+        user.setProperty("username", "tony@grosinger.net");
+        user.setProperty("userguid", "1234567890");
+        
+        Vertex page1 = g.addVertex(null);
+        page1.setProperty("type", "pageView");
+        page1.setProperty("title", "Google Mail");
+        page1.setProperty("userguid", "1234567890");
+        page1.setProperty("url", "https://mail.google.com/mail/u/0/?shva=1#inbox");
+        page1.setProperty("pageOpenTime", new Long("1356128851000"));
+        page1.setProperty("pageCloseTime", new Long("1356132451000"));
+        page1.setProperty("tabId", 1);
+        page1.setProperty("windowId", 100);
+        
+        Vertex page2 = g.addVertex(null);
+        page2.setProperty("type", "pageView");
+        page2.setProperty("title", "Google Calendar");
+        page2.setProperty("userguid", "1234567890");
+        page2.setProperty("url", "https://www.google.com/calendar/render");
+        page2.setProperty("pageOpenTime", new Long("1356128851000"));
+        page2.setProperty("pageCloseTime", new Long("1356132451000"));
+        page2.setProperty("tabId", 2);
+        page2.setProperty("windowId", 100);
+        
+        g.addEdge(null, user, page1, "viewed");
+        g.addEdge(null, user, page2, "viewed");
 
         // Example query using an existing reference
-        for (Vertex vertex : juno.query().vertices()) {
-            System.out.println(vertex.getProperty("name"));
+        for (Vertex vertex : user.query().vertices()) {
+            System.out.println(vertex.getProperty("title"));
         }
 
         // Example query using an index
-        Vertex juno2 = g.getVertices("name", "juno").iterator().next();
-        for (Vertex vertex : juno2.query().vertices()) {
-            System.out.println(vertex.getProperty("name"));
+        Vertex user2 = g.getVertices("username", "tony@grosinger.net").iterator().next();
+        for (Vertex vertex : user2.query().vertices()) {
+            System.out.println(vertex.getProperty("title"));
         }
     }
 }
