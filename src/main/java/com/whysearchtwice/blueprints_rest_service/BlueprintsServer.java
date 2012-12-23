@@ -1,6 +1,9 @@
 package com.whysearchtwice.blueprints_rest_service;
 
+import java.io.File;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.whysearchtwice.blueprints_rest_service.graph_interactions.TitanConnector;
 import com.whysearchtwice.blueprints_rest_service.jersey.JerseyServer;
@@ -113,6 +116,8 @@ public class BlueprintsServer {
     public void shutdown() {
         try {
             webserver.stop();
+            conn.shutdown();
+            FileUtils.deleteDirectory(new File("/tmp/titan"));
         } catch (Exception e) {
             e.printStackTrace();
         }
