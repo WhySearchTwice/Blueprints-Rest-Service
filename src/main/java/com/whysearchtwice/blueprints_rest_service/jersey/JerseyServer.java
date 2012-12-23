@@ -6,6 +6,8 @@ import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.sun.jersey.api.container.grizzly2.GrizzlyServerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
@@ -40,10 +42,18 @@ public class JerseyServer {
     public static TitanConnector connection;
 
     /**
+     * Logger for this class
+     */
+    private static Log log;
+
+    /**
      * Constructor to specify the baseUrl and portNumber before the server is
      * started.
      */
     public JerseyServer(String baseUrl, int portNumber, TitanConnector conn) {
+        // Setup Logging
+        log = LogFactory.getLog(JerseyServer.class);
+
         this.baseUrl = baseUrl;
         this.portNumber = portNumber;
         JerseyServer.connection = conn;
@@ -53,7 +63,7 @@ public class JerseyServer {
     }
 
     private HttpServer createServer() {
-        System.out.println("Creating grizzly server");
+        log.debug("Creating grizzly server");
 
         ResourceConfig rc = new PackagesResourceConfig("com.whysearchtwice.blueprints_rest_service.jersey");
         URI baseUri = UriBuilder.fromUri(baseUrl).port(portNumber).build();
@@ -81,12 +91,13 @@ public class JerseyServer {
      */
     public void start() throws Exception {
         if (webserver == null || !(webserver instanceof HttpServer)) {
+            log.error("Web server has not been initialized");
             throw new Exception("Web server has not been initialized");
         }
 
-        System.out.println("Starting the web server");
+        log.debug("Starting the web server");
         this.webserver.start();
-        System.out.println("Web server started");
+        log.debug("Web server started");
     }
 
     /**
@@ -99,8 +110,8 @@ public class JerseyServer {
             throw new Exception("Web server has not been initialized");
         }
 
-        System.out.println("Stopping the web server");
+        log.debug("Stopping the web server");
         this.webserver.stop();
-        System.out.println("Web server stopped");
+        log.debug("Web server stopped");
     }
 }

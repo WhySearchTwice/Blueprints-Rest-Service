@@ -9,6 +9,8 @@ import java.io.OutputStream;
 
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -31,12 +33,20 @@ public class TitanConnector {
     public User userInteractions;
 
     /**
+     * Logger for this class
+     */
+    private static Log log;
+
+    /**
      * Open a Titan graph using a file store as the backend (not persistent)
      * 
      * @param tempLocation
      *            - Location to save temporary database
      */
     public TitanConnector(String tempLocation) {
+        // Setup Logging
+        log = LogFactory.getLog(TitanConnector.class);
+
         this.graph = TitanFactory.open(tempLocation);
 
         createIndices();
@@ -47,6 +57,9 @@ public class TitanConnector {
      * Open a Titan graph using Cassandra as the backend.
      */
     public TitanConnector() {
+        // Setup Logging
+        log = LogFactory.getLog(TitanConnector.class);
+
         Configuration conf = new BaseConfiguration();
         conf.setProperty("storage.backend", "cassandra");
         conf.setProperty("storage.hostname", "127.0.0.1");
@@ -93,6 +106,8 @@ public class TitanConnector {
      *            Name of the GraphML file to import (based in the project root)
      */
     public void loadXmlData(String filename) {
+        log.debug("Importing GraphML from " + filename);
+
         try {
             InputStream in = new FileInputStream(filename);
             GraphMLReader.inputGraph(graph, in);
@@ -112,6 +127,8 @@ public class TitanConnector {
      *            Name of the file to output to (based in the project root)
      */
     public void dumpXmlData(String filename) {
+        log.debug("Dumping GraphML to " + filename);
+
         try {
             OutputStream out = new FileOutputStream(filename);
             GraphMLWriter.outputGraph(graph, out);
@@ -169,7 +186,5 @@ public class TitanConnector {
         for (Vertex vertex : user2.query().vertices()) {
             System.out.println(vertex.getProperty("title"));
         }
-
-        graph = g;
     }
 }

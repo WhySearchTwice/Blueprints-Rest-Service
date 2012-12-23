@@ -1,9 +1,14 @@
 package com.whysearchtwice.blueprints_rest_service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.whysearchtwice.blueprints_rest_service.graph_interactions.TitanConnector;
 import com.whysearchtwice.blueprints_rest_service.jersey.JerseyServer;
@@ -27,6 +32,11 @@ public class BlueprintsServer {
     private static JerseyServer webserver;
 
     /**
+     * Logger for this class
+     */
+    private static Log log;
+
+    /**
      * Constructor that will start the service using a file backend
      * 
      * @param baseUrl
@@ -38,13 +48,16 @@ public class BlueprintsServer {
      *            The file which should be used as the backend
      */
     public BlueprintsServer(String baseUrl, int portNumber, String database) {
+        // Setup Logging
+        log = LogFactory.getLog(BlueprintsServer.class);
+
         // Create the titan graph
         if (database == null) {
             conn = new TitanConnector();
         } else {
             conn = new TitanConnector("/tmp/titan");
         }
-        
+
         // Create the web server
         webserver = new JerseyServer("http://localhost/", 8080, conn);
 
@@ -87,7 +100,7 @@ public class BlueprintsServer {
             int portNumber = Integer.parseInt(args[1]);
             server = new BlueprintsServer(args[0], portNumber);
         } else {
-            System.out.println("Invalid arguments. Expecting <baseUrl> <portNumber> <titanDir> with last param optional");
+            log.error("Invalid arguments. Expecting <baseUrl> <portNumber> <titanDir> with last param optional");
         }
 
         // Wait for the user to press enter before stopping the web server
