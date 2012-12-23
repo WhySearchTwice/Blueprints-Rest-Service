@@ -86,7 +86,7 @@ public class EndpointsTest extends TestCase {
         StringWriter writer = new StringWriter();
         IOUtils.copy(responseBodyStream, writer);
         String response = writer.toString();
-        assertTrue(response.equals("1234567890"));
+        assertTrue(response.equals("{\"userguid\": \"1234567890\"}"));
         
     }
 }
