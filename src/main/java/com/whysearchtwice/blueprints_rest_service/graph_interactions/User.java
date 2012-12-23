@@ -11,16 +11,20 @@ public class User {
     }
 
     public String getUserEmailByGuid(String guid) {
-        for (Vertex v : graph.getVertices("userguid", guid)) {
-            return (String) v.getProperty("username");
+        Vertex v = graph.getVertices("userguid", guid).iterator().next();
+        if (v != null) {
+            return String.format("{\"username\": \"%s\"}", v.getProperty("username"));
+        } else {
+            return "No results found";
         }
-        return "Not Found";
     }
 
     public String getUserGuidByEmail(String email) {
-        for (Vertex v : graph.getVertices("username", email)) {
-            return (String) v.getProperty("userguid");
+        Vertex v = graph.getVertices("username", email).iterator().next();
+        if (v != null) {
+            return String.format("{\"userguid\": \"%s\"}", v.getProperty("userguid"));
+        } else {
+            return "No results found";
         }
-        return "Not Found";
     }
 }
