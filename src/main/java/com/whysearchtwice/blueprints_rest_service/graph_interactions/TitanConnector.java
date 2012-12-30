@@ -31,6 +31,7 @@ public class TitanConnector {
     private TitanGraph graph;
 
     public User userInteractions;
+    public Page pageInteractions;
 
     /**
      * Logger for this class
@@ -88,6 +89,7 @@ public class TitanConnector {
      */
     private void createConnections() {
         userInteractions = new User(graph);
+        pageInteractions = new Page(graph);
     }
 
     /**

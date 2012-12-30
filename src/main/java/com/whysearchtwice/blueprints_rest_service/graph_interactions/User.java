@@ -1,5 +1,8 @@
 package com.whysearchtwice.blueprints_rest_service.graph_interactions;
 
+import java.util.Iterator;
+import java.util.UUID;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,7 +27,7 @@ public class User {
     public String getUserEmailByGuid(String guid) {
         log.debug("Retrieving username by guid: " + guid);
 
-        Vertex v = graph.getVertices("userguid", guid).iterator().next();
+        Vertex v = graph.getVertex(guid);
         if (v != null) {
             return String.format("{\"username\": \"%s\"}", v.getProperty("username"));
         } else {
@@ -35,11 +38,17 @@ public class User {
     public String getUserGuidByEmail(String email) {
         log.debug("Retrieving guid by email: " + email);
 
-        Vertex v = graph.getVertices("username", email).iterator().next();
-        if (v != null) {
-            return String.format("{\"userguid\": \"%s\"}", v.getProperty("userguid"));
+        Iterator<Vertex> container = graph.getVertices("username", email).iterator();
+        if (container.hasNext()) {
+            return String.format("{\"userguid\": \"%s\"}", container.next().getProperty("userguid"));
         } else {
-            return "No results found";
+            // No result found, create a new user
+            String newUserGuid = UUID.randomUUID().toString();
+            Vertex newUser = graph.addVertex(newUserGuid);
+            newUser.setProperty("username", email);
+            newUser.setProperty("userguid", newUserGuid);
+
+            return String.format("{\"userguid\": \"%s\"}", newUserGuid);
         }
     }
 }

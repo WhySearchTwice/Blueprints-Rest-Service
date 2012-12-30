@@ -110,7 +110,7 @@ public class BlueprintsServer {
             e.printStackTrace();
         }
 
-        server.shutdown();
+        server.shutdown(false);
     }
 
     /**
@@ -126,11 +126,14 @@ public class BlueprintsServer {
     /**
      * Shuts down the web server after it has been created and started
      */
-    public void shutdown() {
+    public void shutdown(boolean cleanup) {
         try {
             webserver.stop();
             conn.shutdown();
-            FileUtils.deleteDirectory(new File("/tmp/titan"));
+            
+            if(cleanup) {
+                FileUtils.deleteDirectory(new File("/tmp/titan"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
