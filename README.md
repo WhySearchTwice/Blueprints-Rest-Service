@@ -1,4 +1,4 @@
 Blue-Rest-Service
 =================
 
-Server side interface for Titan and Hadoop (Not using the Rexter library)
+Unused proof-of-concept REST service. Currently service can be found in the Data and REST Services repo.
